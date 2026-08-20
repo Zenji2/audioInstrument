@@ -2,11 +2,17 @@
 // document.body.style.backgroundColor = "red";
 // find my test button
 const testButton = document.getElementById("test-button");
+// find my key test button
+const key = document.getElementById("key-test");
 // find out intro modal
+
 const introModal = document.getElementById("intro-modal");
 // console.log(introModal);
 // find modal close button
 const introModalCloseButton = document.getElementById("intro-modal-close");
+
+// is the mouse button held?
+let mouseButtonDown = false;
 
 ///////// Modal
 // Show modal on page load
@@ -39,10 +45,14 @@ function toneInit(){
     synth.connect(Tone.Destination);
 }
 
-// do something when we click that button
-testButton.addEventListener("click", playTestNote);
-
-function playTestNote(){
-synth.triggerAttackRelease("C4", "8n");
+function playNote(e){
+    // find the element that the event ran on
+    let keyPressed = e.target;
+    console.log(keyPressed);
+    // find the data-note attribute of that element
+    let note = keyPressed.dataset.note;
+    console.log(note);
 }
 
+testButton.addEventListener("mouse", playNote);
+key.addEventListener("mousedown", playNote);
