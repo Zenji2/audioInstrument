@@ -13,6 +13,13 @@ const introModalCloseButton = document.getElementById("intro-modal-close");
 
 // is the mouse button held?
 let mouseButtonDown = false;
+// update our variable based on the mouse being held down
+window.addEventListener("mousedown", function(){
+    mouseButtonDown = true;
+});
+window.addEventListener("mouseup", function(){
+    mouseButtonDown = false;
+});
 
 ///////// Modal
 // Show modal on page load
@@ -36,9 +43,10 @@ introModal.addEventListener("close", toneInit);
 
 
 ///////// Tone
+// create instrument
 
-
-const synth = new Tone.Synth();
+// change to polysynth
+const synth = new Tone.PolySynth();
 
 function toneInit(){
     // connect synth to audio output
@@ -52,7 +60,30 @@ function playNote(e){
     // find the data-note attribute of that element
     let note = keyPressed.dataset.note;
     console.log(note);
+    // play the note for the right amount of time
+    // if mouse button is held previously play note
+    if(mouseButtonDown === true){
+        synth.triggerAttack(note);
+    }
+
 }
 
-testButton.addEventListener("mouse", playNote);
+function endNote(e){
+    // find the element that the event ran on
+    let keyPressed = e.target;
+    console.log(keyPressed);
+    // find the data-note attribute of that element
+    let note = keyPressed.dataset.note;
+    console.log(note);
+    // play the note for the right amount of time
+    synth.triggerRelease(note);
+}
+
+testButton.addEventListener("mousedown", playNote);
+testButton.addEventListener("mouseenter", playNote);
+testButton.addEventListener("mouseup", endNote);
+testButton.addEventListener("mouseleave", endNote);
 key.addEventListener("mousedown", playNote);
+key.addEventListener("mouseenter", playNote);
+key.addEventListener("mouseup", endNote);
+key.addEventListener("mouseleave", endNote);
